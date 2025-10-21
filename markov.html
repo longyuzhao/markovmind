@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Markov Mind? - MarkovMind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        h1 a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h1 a:hover {
+            color: #666;
+        }
+
+        .tagline {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 50px 0 30px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.1em;
+            margin: 25px 0 12px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        h5 {
+            font-size: 1em;
+            margin: 20px 0 10px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        a {
+            color: #0066cc;
+        }
+
+        a:hover {
+            color: #0052a3;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="index.html">MarkovMind</a></h1>
+            <p class="tagline">Hi, this is Longyu Zhao. Welcome to my personal website.</p>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="intro">
+                <h2>What is Markov Mind?</h2>
+                <p>The name "MarkovMind" draws inspiration from Markov chains, a fundamental concept in probability theory and machine learning. Just as Markov chains tell us that the future depends only on the current state, not the past, this website embodies the belief that anyone can start their machine learning journey regardless of their background. What matters most is your current state of curiosity and commitment to learning.</p>
+            </section>
+
+            <section>
+                <h3>What is a Markov Chain?</h3>
+                
+                <p>A Markov chain is a mathematical model that describes a sequence of events where the probability of each event depends only on the state attained in the previous event. This "memoryless" property makes them incredibly useful for modeling systems where the current state contains all the information needed to predict the future.</p>
+
+                <h4>Mathematical Foundation</h4>
+
+                <p>Formally, a Markov chain is defined by:</p>
+                <ul>
+                    <li><strong>State Space (S):</strong> The set of all possible states</li>
+                    <li><strong>Transition Matrix (P):</strong> A matrix where P(i,j) represents the probability of transitioning from state i to state j</li>
+                    <li><strong>Initial Distribution:</strong> The probability distribution over the initial states</li>
+                </ul>
+
+                <p>The key property is the Markov property:</p>
+                <pre><code>P(X_{n+1} = j | X_n = i, X_{n-1} = i_{n-1}, ..., X_0 = i_0) = P(X_{n+1} = j | X_n = i)</code></pre>
+
+            <section>
+                <h3>The Mind Behind the Name</h3>
+                <p>As someone passionate about probabilistic models and machine learning, I see Markov chains as a beautiful example of how mathematical concepts can capture the essence of complex, real-world phenomena. This website serves as a space to explore these ideas, share insights, and connect with others who share similar interests.</p>
+                
+                <p>Whether you're here because of the name Markov, explore some projects, or simply discover new ideas, welcome to MarkovMind – where probability meets possibility.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Longyu Zhao. Built with simplicity in mind.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -3,97 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Website</title>
+    <title>MarkovMind</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            font-size: 16px;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 40px 20px;
         }
-        
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        header {
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
         }
-        
+
         h1 {
-            color: #333;
-            text-align: center;
-            border-bottom: 2px solid #007acc;
-            padding-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000;
         }
-        
-        nav {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        nav a {
-            color: #007acc;
+
+        h1 a {
+            color: #000;
             text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
         }
-        
+
+        h1 a:hover {
+            color: #666;
+        }
+
+        .tagline {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
         nav a:hover {
             text-decoration: underline;
         }
-        
-        .content {
-            margin-top: 30px;
+
+        .intro {
+            margin-bottom: 50px;
+            font-size: 1.05em;
+            line-height: 1.8;
         }
-        
-        p {
+
+        h2 {
+            font-size: 1.8em;
+            margin: 50px 0 30px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .post-list {
+            list-style: none;
+        }
+
+        .post-item {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .post-title a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .post-title a:hover {
+            color: #0066cc;
+        }
+
+        .post-meta {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .post-excerpt {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .about-section {
+            margin-top: 40px;
+        }
+
+        .about-section p {
             margin-bottom: 15px;
+        }
+
+        .about-section ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        .about-section li {
+            margin-bottom: 8px;
             color: #555;
         }
-        
+
+        a {
+            color: #0066cc;
+        }
+
+        a:hover {
+            color: #0052a3;
+        }
+
         footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #777;
-            font-size: 14px;
+            color: #999;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to My Website</h1>
-        
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="projects.html">Projects</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-        
-        <div class="content">
-            <h2>Hello World!</h2>
-            
-            <p>Welcome to my simple website. This is a basic text-based site hosted on GitHub Pages with a custom domain.</p>
-            
-            <p>This website demonstrates how you can create a clean, professional-looking site using just HTML and CSS. No complex frameworks or databases needed - just simple, fast-loading web pages.</p>
-            
-            <h3>What You'll Find Here</h3>
-            
-            <p>Navigate through the different sections using the menu above:</p>
-            
-            <p><strong>About:</strong> Learn more about me and this website</p>
-            <p><strong>Projects:</strong> Check out some of my work and interests</p>
-            <p><strong>Contact:</strong> Get in touch with me</p>
-            
-            <p>This site loads quickly, works on all devices, and doesn't require any JavaScript or external dependencies. Sometimes simple is best!</p>
-        </div>
-        
+        <header>
+            <h1><a href="/">MarkovMind</a></h1>
+            <p class="tagline">Hi, this is Longyu Zhao. Welcome to my personal website.</p>
+            <nav>
+                <a href="markov.html">What is Markov Mind?</a>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="blog">
+                <ul class="post-list">
+                    <li class="post-item">
+                        <h3 class="post-title"><a href="openpi.html">Trying out OpenPI model</a></h3>
+                        <div class="post-meta">October 2025</div>
+                        <p class="post-excerpt">OpenPI has released pi0 and pi05 models. Let's try and see how these models work out of the box.</p>
+                    </li>
+                </ul>
+            </section>
+        </main>
+
         <footer>
-            <p>&copy; 2025 My Website. Built with HTML & CSS.</p>
+            <p>&copy; 2025 Markov Mind.</p>
         </footer>
     </div>
 </body>

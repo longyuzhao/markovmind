@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using OpenPI Model on ALOHA Simulation - MarkovMind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        h1 a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h1 a:hover {
+            color: #666;
+        }
+
+        .tagline {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.95em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+        }
+
+        .post-title {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .post-meta {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            margin: 40px 0 20px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        a {
+            color: #0066cc;
+        }
+
+        a:hover {
+            color: #0052a3;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="index.html">MarkovMind</a></h1>
+            <p class="tagline">Hi, this is Longyu Zhao. Welcome to my personal website.</p>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <article>
+                <header class="post-header">
+                    <h1 class="post-title">Using OpenPI Model on ALOHA Simulation</h1>
+                    <div class="post-meta">October 2025</div>
+                </header>
+
+                <p><a href="https://github.com/Physical-Intelligence/openpi">OpenPI</a> is a powerful foundation model for robotic manipulation that can understand and execute complex manipulation tasks from natural language instructions. The released fine tune model is trained on datasets from different robots (ALOHA, DROID, LIBERO).
+                    Given <a href="https://github.com/google-deepmind/aloha_sim">ALOHA (A Low-cost Open-source Hardware for Autonomous manipulation) sim</a> is a well established simulator, it creates a robust platform for me to test the OpenPI model in the simulation.</p>
+                
+                <p>What I would like to achieve in this post is to connect OpenPI model and Aloha simulator, so that we can get the observations from the simulator, send them (along with prompt) to OpenPI model, get the actions, send the actions to Aloha sim,
+                    and see if the model commands work out of the box.
+                </p>
+
+                <h2>What is OpenPI?</h2>
+                
+                <p>OpenPI is a large-scale robotics foundation model trained on diverse manipulation data that can:</p>
+                <ul>
+                    <li><strong>Understand natural language instructions</strong> for complex manipulation tasks</li>
+                    <li><strong>Generate executable action sequences</strong> from high-level task descriptions</li>
+                    <li><strong>Adapt to different robotic platforms</strong> through its modular architecture</li>
+                    <li><strong>Learn from demonstration data</strong> to improve task performance</li>
+                </ul>
+
+                <blockquote>
+                    "OpenPI bridges the gap between natural language understanding and robotic manipulation, making complex tasks accessible through simple instructions."
+                </blockquote>
+
+                <h2>ALOHA Simulation Environment</h2>
+
+                <p>ALOHA provides a comprehensive simulation environment that includes:</p>
+                <ul>
+                    <li><strong>Dual-arm robotic system</strong> with realistic physics simulation</li>
+                    <li><strong>Diverse manipulation scenarios</strong> including household tasks</li>
+                    <li><strong>Camera sensors</strong> for visual feedback and perception</li>
+                    <li><strong>Modular design</strong> for easy task customization</li>
+                </ul>
+
+                <h2>Setting Up OpenPI with ALOHA</h2>
+
+                <h3>Prerequisites</h3>
+                <p>Before getting started, ensure you have:</p>
+                <ul>
+                    <li>A local computer with ALOHA simulation environment set up. Below we call this local env.</li>
+                    <li>Same computer or a remote server (AWS, GCP) CUDA-compatible GPU (at least 24G GPU memory). Below we call this remote server.</li>
+                        <ul>
+                            <li>AWS: g5.4xlarge</li>
+                            <li>GCP: g2-standard-8</li>
+                            <li>Choose Ubuntu 22 image (suggested by OpenPI) and I installed GPU driver manually</li>
+                        </ul>
+                </ul>
+
+                <h3>Steps</h3>
+
+                <p>1. (Local env and remote server) Follow <a href="https://github.com/Physical-Intelligence/openpi?tab=readme-ov-file#installation">OpenPI instructions</a> to install openPI in a virtual env.</p>
+
+                <p>2. (Local env) Follow <a href="https://github.com/google-deepmind/aloha_sim?tab=readme-ov-file#installation">Aloha_sim instructions</a> to install Aloha sim in the same virtual env.</p>
+
+                <p>3. (Remote server) Set up OpenPI model server</p>
+                <pre><code>(optional) gcloud compute ssh <instance-name> --zone=us-west1-a -- -L 8001:localhost:8000 # remap to port 8001 as my local 8000 port is used
+uv run scripts/serve_policy.py --env=ALOHA_SIM</code></pre>
+
+                <p>This will spawn up a server in remote server to serve a specific model (in this case `ALOHA_SIM` model checkpoint)</p>
+
+                <p>4. (Local env) Create a script which gets the states from aloha sim, send them to the remote server via web socket, wait for the actions to return and send the actions to simulator.</p>
+                
+                <p>Note that the states read from aloha sim might be different from the states OpenPI model needs, so some remapping is needed.
+                    If you are not sure what are the states, you can print the <code>Timestep</code> and get the detailed states:
+                </p>
+
+                <pre><code>observation={
+                    'overhead_cam': array([[[38, 37, 34],
+                    [38, 37, 34],
+                    [39, 38, 35],
+                    ...,] shape=(480, 848, 3), dtype=uint8),
+                    'worms_eye_cam': array([[[ 13,  13,  13],
+                    [ 13,  13,  13],
+                    [ 13,  13,  13],
+                    ...,] shape=(480, 848, 3), dtype=uint8),
+                    'wrist_cam_left': array([[[201, 181, 156],
+                    [201, 181, 156],
+                    [200, 180, 155],
+                    ...,], shape=(480, 848, 3), dtype=uint8),
+                    'wrist_cam_right': array([[[100,  98,  96],
+                    [ 99,  97,  96],
+                    [ 99,  97,  96],
+                    ...,], shape=(480, 848, 3), dtype=uint8),
+                    'commanded_joints_pos': array([ 1. , -1. ,  1. , -0.1,  1. , -1. ,  1. , -1. ,  0.1, -1. ,  1. ,
+                   -1. ,  0.1, -0.1]),
+                   'joints_pos': array([ 0.99999981, -0.99647149,  1.02385611, -0.10096935,  1.01532444,
+                   -1.00691069,  0.89760539, -1.00000068,  0.11115466, -0.98875707,
+                    1.00626444, -1.01548462,  0.10704498, -0.06445472]),
+                    'joints_vel': array([ 1.66724583e-06, -1.80126563e-03, -1.43900395e-03,  3.04101457e-08,
+                    1.43732532e-04, -3.23339069e-05,  1.79602634e-08,  5.93016137e-07,
+                    1.09778011e-05,  2.15828230e-03, -4.42307478e-05,  1.70258303e-05,
+                   -9.33115051e-05,  2.51849170e-05,  4.74895675e-08, -4.96911670e-08]),
+                   'physics_state': array([ 9.99999922e-01, -9.96648133e-01,  1.02371581e+00, -1.00969346e-01,
+                    1.01533684e+00, -1.00691393e+00,  2.55578715e-02,  2.56684472e-02,
+                   -9.99999920e-01,  1.11366427e-01, -9.88761294e-01,  1.00626609e+00,
+                   -1.01549057e+00,  1.07047375e-01,  7.74251165e-03,  8.49681109e-03,
+                    1.61389783e-01, -4.72533042e-02,  3.16101929e-02,  7.71041701e-01,
+                   -1.38902593e-05,  2.08568358e-04, -6.36784620e-01, -1.57767423e-01,
+                    1.86642700e-02,  3.25333903e-02,  9.99999624e-01, -5.37630861e-04,
+                   -6.80770724e-04, -1.25212201e-05,  7.55768177e-07, -1.73340288e-03,
+                   -1.36894889e-03, -1.36105070e-08,  1.08249262e-04, -3.22442859e-05,
+                    1.15066559e-08,  5.45669097e-07,  5.08864710e-06,  2.07913955e-03,
+                   -4.04322531e-05,  1.60750717e-05, -3.28389046e-05,  2.30414874e-05,
+                    4.68277375e-08, -4.89862158e-08, -2.84465723e-08, -1.11741633e-07,
+                   -6.27614694e-07,  2.80564069e-05,  5.96245493e-05,  3.02231373e-08,
+                    1.61074038e-10, -8.32415261e-09, -1.48846064e-15, -1.89664808e-10,
+                    1.49782058e-10, -1.39299950e-07]),
+                    'undelayed_joints_pos': array([ 0.99999992, -0.99664813,  1.02371581, -0.10096935,  1.01533684,
+                   -1.00691393,  0.89760547, -0.99999992,  0.11136643, -0.98876129,
+                    1.00626609, -1.01549057,  0.10704737, -0.06445447]),
+                    'undelayed_joints_vel': array([ 7.55768177e-07, -1.73340288e-03, -1.36894889e-03, -1.36105070e-08,
+                    1.08249262e-04, -3.22442859e-05,  1.15066559e-08,  5.45669097e-07,
+                    5.08864710e-06,  2.07913955e-03, -4.04322531e-05,  1.60750717e-05,
+                   -3.28389046e-05,  2.30414874e-05,  4.68277375e-08, -4.89862158e-08]),
+                   'delayed_joints_pos': array([ 0.99999981, -0.99647149,  1.02385611, -0.10096935,  1.01532444,
+                   -1.00691069,  0.89760539, -1.00000068,  0.11115466, -0.98875707,
+                    1.00626444, -1.01548462,  0.10704498, -0.06445472]),
+                    'delayed_joints_vel': array([ 1.66724583e-06, -1.80126563e-03, -1.43900395e-03,  3.04101457e-08,
+                    1.43732532e-04, -3.23339069e-05,  1.79602634e-08,  5.93016137e-07,
+                    1.09778011e-05,  2.15828230e-03, -4.42307478e-05,  1.70258303e-05,
+                   -9.33115051e-05,  2.51849170e-05,  4.74895675e-08, -4.96911670e-08]),
+                   'delayed_physics_state': array([ 9.99998994e-01, -9.96097185e-01,  1.02415862e+00, -1.00969369e-01,
+                    1.01528152e+00, -1.00690447e+00,  2.55578636e-02,  2.56682566e-02,
+                   -1.00000598e+00,  1.10706625e-01, -9.88747414e-01,  1.00626075e+00,
+                   -1.01544115e+00,  1.07038951e-01,  7.74249756e-03,  8.49682585e-03,
+                    1.61389791e-01, -4.72532709e-02,  3.16103796e-02,  7.71041700e-01,
+                   -2.27547603e-05,  2.04387940e-04, -6.36784622e-01, -1.57767423e-01,
+                    1.86642725e-02,  3.25333903e-02,  9.99999624e-01, -5.37630847e-04,
+                   -6.80770735e-04, -1.25003251e-05,  8.20699437e-06, -1.94504192e-03,
+                   -1.59018865e-03,  2.38245247e-07,  3.21733366e-04, -2.86469647e-05,
+                    5.49496269e-08,  7.74880973e-07,  5.35753294e-05,  2.32587568e-03,
+                   -5.25285324e-05,  2.03717166e-05, -4.05393856e-04,  3.86094736e-05,
+                    4.48595780e-08, -4.70179679e-08, -2.79666243e-08, -1.09856320e-07,
+                   -6.16957462e-07,  2.75800956e-05,  5.86123086e-05,  2.97100410e-08,
+                    1.61074384e-10, -8.32415262e-09, -1.25030462e-15, -1.89664724e-10,
+                    1.49780543e-10, -1.39299950e-07])})
+             </code></pre>
+
+                <p>There are totally 14 actions in this env, 7 actions per arm. Here is the script to connect everything together.</p>
+
+                <pre><code>import sys
+import os
+
+sys.path.insert(0, os.path.expanduser('~/code/aloha_sim')) # hack to find the package
+
+from dm_control import viewer
+import numpy as np
+from aloha_sim import task_suite
+from openpi_client import image_tools
+from openpi_client import websocket_client_policy
+
+
+class Pi0Policy:
+    """Policy class that queries Pi0 server for actions."""
+    
+    def __init__(self, client, task_prompt, replan_frequency=10, execute_steps_per_action=5):
+        """
+        Args:
+            client: WebsocketClientPolicy instance
+            task_prompt: Task instruction string
+            replan_frequency: Query Pi0 every N steps
+            execute_steps_per_action: Hold each action for N steps
+        """
+        self.client = client
+        self.task_prompt = task_prompt
+        self.replan_frequency = replan_frequency
+        self.execute_steps_per_action = execute_steps_per_action
+        
+        # State
+        self.action_buffer = None
+        self.action_index = 0
+        self.current_action = None
+        self.step_counter = 0
+        self.action_hold_counter = 0
+        
+    def process_observation(self, obs):
+        """Convert ALOHA sim observation to Pi0 format."""
+        try:
+            # Extract images
+            img_overhead = obs['overhead_cam']
+            img_worms_eye = obs['worms_eye_cam']
+            img_wrist_left = obs['wrist_cam_left']
+            img_wrist_right = obs['wrist_cam_right']
+            
+            # Extract joint states
+            joint_positions = obs['joints_pos']
+            
+            # Create Pi0 observation
+            observation = {
+                "state": joint_positions.astype(np.float64),
+                "images": {
+                    "cam_high": np.transpose(
+                        image_tools.convert_to_uint8(
+                            image_tools.resize_with_pad(img_overhead, 224, 224)
+                        ), (2, 0, 1)
+                    ),
+                    "cam_low": np.transpose(
+                        image_tools.convert_to_uint8(
+                            image_tools.resize_with_pad(img_worms_eye, 224, 224)
+                        ), (2, 0, 1)
+                    ),
+                    "cam_left_wrist": np.transpose(
+                        image_tools.convert_to_uint8(
+                            image_tools.resize_with_pad(img_wrist_left, 224, 224)
+                        ), (2, 0, 1)
+                    ),
+                    "cam_right_wrist": np.transpose(
+                        image_tools.convert_to_uint8(
+                            image_tools.resize_with_pad(img_wrist_right, 224, 224)
+                        ), (2, 0, 1)
+                    ),
+                },
+                "prompt": self.task_prompt,
+            }
+            return observation
+        except KeyError as e:
+            print(f"Missing observation key: {e}")
+            print(f"Available keys: {obs.keys()}")
+            return None
+    
+    def __call__(self, timestep):
+        """Policy function called by the viewer every step."""
+        obs = timestep.observation
+        
+        # Query Pi0 every replan_frequency steps
+        if self.step_counter % self.replan_frequency == 0:
+            print(f"\n=== Step {self.step_counter}: Replanning ===")
+            
+            # Process observation
+            pi0_obs = self.process_observation(obs)
+            if pi0_obs is None:
+                return np.zeros(14)  # ALOHA has 14D action space
+            
+            try:
+                # Get action chunk from Pi0
+                action_chunk = self.client.infer(pi0_obs)["actions"]
+                self.action_buffer = action_chunk
+                self.action_index = 0
+                self.action_hold_counter = 0
+                print(f"Received {self.action_buffer.shape[0]} actions from Pi0")
+            except Exception as e:
+                print(f"Error querying Pi0: {e}")
+                return np.zeros(14)
+        
+        # Get next action from buffer every execute_steps_per_action steps
+        if self.action_hold_counter % self.execute_steps_per_action == 0:
+            if self.action_buffer is not None and self.action_index < len(self.action_buffer):
+                self.current_action = self.action_buffer[self.action_index]
+                self.action_index += 1
+                print(f"  Step {self.step_counter}: Using action {self.action_index}/{len(self.action_buffer)}")
+        
+        # Hold the current action for multiple steps
+        if self.current_action is not None:
+            action = self.current_action
+        else:
+            action = np.zeros(14)
+        
+        # Increment counters
+        self.step_counter += 1
+        self.action_hold_counter += 1
+        
+        # Handle episode end
+        if timestep.last():
+            print(f"\n{'='*60}")
+            print(f"Episode ended at step {self.step_counter}")
+            print(f"Final reward: {timestep.reward}")
+            print(f"{'='*60}\n")
+            self.reset()
+        
+        return action
+    
+    def reset(self):
+        """Reset policy state for new episode."""
+        self.action_buffer = None
+        self.action_index = 0
+        self.current_action = None
+        self.step_counter = 0
+        self.action_hold_counter = 0
+
+
+def main():
+    # Create ALOHA sim environment
+    env = task_suite.create_task_env('HandOverBanana', time_limit=800.0)
+    
+    # Connect to Pi0 server
+    client = websocket_client_policy.WebsocketClientPolicy(host="localhost", port=8001)
+    
+    # Create policy
+    policy = Pi0Policy(
+        client=client,
+        task_prompt="hand over banana",
+        replan_frequency=10,
+        execute_steps_per_action=2
+    )
+    
+    # Launch viewer
+    print("=" * 60)
+    print("Launching ALOHA Sim with Pi0 Policy")
+    print("=" * 60)
+    print(f"Task: {policy.task_prompt}")
+    print(f"Replanning frequency: every {policy.replan_frequency} steps")
+    print(f"Action hold duration: {policy.execute_steps_per_action} steps")
+    print("Make sure Pi0 server is running on localhost:8001")
+    print("=" * 60)
+    
+    viewer.launch(env, policy=policy)
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+
+                <p>After running this script, you should see a simulator explorer interface showing up. Press <code>Space</code> to start the simulation.</p>
+
+                <img src="img/handoverbanana.png" alt="hand over banana" style="max-width: 100%; height: auto;">
+
+                <p>To try a different environment and model checkpoint, we can go to <a href="https://github.com/Physical-Intelligence/openpi/blob/main/scripts/serve_policy.py#L59">server_policy.py</a> (in remote server) to change the config and dir. For example, there is a checkpoint
+                    which is fine-tuned on towel folding, and there happens to be an aloha env called <code>TowelFoldInHalf</code>. So we can modify the serve_policy.py to be:
+                </p>
+
+                <pre><code>EnvMode.ALOHA: Checkpoint(
+                    config="pi0_aloha_towel",
+                    dir="gs://openpi-assets/checkpoints/pi0_aloha_towel",
+                ),</code></pre>
+
+                And then modify the script to use <code>TowelFoldInHalf</code> and a different prompt like "fold the towel in half".
+
+                <img src="img/foldtowel.png" alt="fold towel begin" style="max-width: 100%; height: auto;">
+                
+                <h3>Observations</h3>
+
+                <p>I tried both <code>pi0_aloha_sim</code> checkpoint in <code>HandOverBanana</code> env and <code>pi0_aloha_towel</code> checkpoint in <code>TowelFoldInHalf</code> env, but neither works very well. After some time, the robotic arms do get actions from the model
+                but do not seem to move towards the goal. I tried different replanning and execution frequency but no success.</p>
+                
+                <img src="img/foldtowelend.png" alt="fold towel end" style="max-width: 100%; height: auto;">
+
+                <p>Some possible reasons:</p>
+                <ol>
+                    <li><code>pi0_aloha_sim</code> is not trained (at least not fine tuned) on hand over banana task, and not able to generalize.</li>
+                    <li><code>pi0_aloha_towel</code> is trained with real world ALOHA robot, and there is a real-to-sim gap when inferencing in simulation.</li>
+                    <li>Hyperparameter tuning, the right amount of frequency between waiting for action execution and sampling new actions.</li>
+                </ol>
+
+                <p>Although we were not able to actually perform the task with pi0 model zero-shot in the simulation, at least we set up the entire pipeline and were able to feed the observations to the OpenPI model and send the returned actions back to the simulator.
+                    I am following up with <a href="https://github.com/Physical-Intelligence/openpi/issues/732">OpenPI</a> to see if there are further tunings can be done.
+                </p>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Longyu Zhao. Built with simplicity in mind.</p>
+        </footer>
+    </div>
+</body>
+</html>
